@@ -28,7 +28,6 @@ const agentData = {
     useCase: 'PRICES / COMPETITORS / MARKET SHIFTS',
     description:
       'A lightweight interface to interact with project-specific agents, ask questions, and inspect the logic behind the work. This preview is designed for insights around the citrus market, not actions.',
-    placeholder: 'Ask about prices, competitors, or market shifts',
     prompts: [
       'What are the latest pricing signals?',
       'Which competitors are most active right now?',
@@ -44,7 +43,6 @@ const agentData = {
     useCase: 'REPORTING / SIGNALS / MARKET CHANGES',
     description:
       'A lightweight interface to interact with project-specific agents, ask questions, and inspect the logic behind the work. This preview is designed for mining market insights, not actions.',
-    placeholder: 'Ask about mining signals, reports, or market changes',
     prompts: [
       'What matters most for the executive report this week?',
       'Summarize the latest market changes.',
@@ -60,7 +58,6 @@ const agentData = {
     useCase: 'EXECUTION / WORKFLOWS / RETAIL INTELLIGENCE',
     description:
       'A lightweight interface to interact with project-specific agents, ask questions, and inspect the logic behind the work. This preview is designed for workflow and execution insights, not actions.',
-    placeholder: 'Ask about execution, workflows, or retail intelligence',
     prompts: [
       'What matters most in commercial execution right now?',
       'Summarize current workflow bottlenecks.',
@@ -83,6 +80,7 @@ const metaStatus = document.getElementById('meta-status');
 const sendButton = document.getElementById('chat-send');
 
 let currentAgent = 'lemon';
+let selectedPrompt = agentData[currentAgent].prompts[0];
 
 function renderConversation(agentKey, promptText) {
   const agent = agentData[agentKey];
@@ -109,7 +107,8 @@ function renderStarterPrompts(agentKey) {
     button.className = 'starter-prompt';
     button.textContent = prompt;
     button.addEventListener('click', () => {
-      chatPrompt.value = prompt;
+      selectedPrompt = prompt;
+      chatPrompt.textContent = prompt;
       renderConversation(agentKey, prompt);
       metaStatus.textContent = 'PREVIEW';
     });
@@ -123,12 +122,12 @@ function renderAgent(agentKey) {
   agentScope.textContent = agent.scope;
   agentUseCase.textContent = agent.useCase;
   agentDescription.textContent = agent.description;
-  chatPrompt.value = agent.prompts[0];
-  chatPrompt.placeholder = agent.placeholder;
+  selectedPrompt = agent.prompts[0];
+  chatPrompt.textContent = selectedPrompt;
   metaAgent.textContent = agent.name;
   metaStatus.textContent = 'PREVIEW';
   renderStarterPrompts(agentKey);
-  renderConversation(agentKey, agent.prompts[0]);
+  renderConversation(agentKey, selectedPrompt);
 }
 
 Object.entries(agentData).forEach(([key, agent]) => {
@@ -143,16 +142,8 @@ agentSelect.addEventListener('change', (event) => {
 });
 
 sendButton.addEventListener('click', () => {
-  const prompt = chatPrompt.value.trim();
-  if (!prompt) return;
-  renderConversation(currentAgent, prompt);
-});
-
-chatPrompt.addEventListener('keydown', (event) => {
-  if (event.key === 'Enter') {
-    event.preventDefault();
-    sendButton.click();
-  }
+  if (!selectedPrompt) return;
+  renderConversation(currentAgent, selectedPrompt);
 });
 
 renderAgent(currentAgent);
