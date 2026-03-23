@@ -145,11 +145,11 @@
             <h2>CHAT WITH THE AGENT</h2>
             <p>
               A lightweight interface to interact with project-specific agents, ask questions, and
-              inspect the logic behind the work.
+              inspect the logic behind the work. This preview is designed for insights, not actions.
             </p>
 
             <div class="dossier-list">
-              <div><span>MODE</span><strong>PREVIEW UI</strong></div>
+              <div><span>MODE</span><strong>PREVIEW / READ-ONLY</strong></div>
               <div><span>TYPE</span><strong>PROJECT-SPECIFIC AGENT</strong></div>
               <div><span>USE CASE</span><strong>QUESTIONS / SIGNALS / CONTEXT</strong></div>
             </div>
@@ -159,11 +159,12 @@
                 <label class="select-label" for="agent-select">SELECT AGENT</label>
                 <div class="select-wrap">
                   <select id="agent-select">
-                    <option>Lemon Intel</option>
-                    <option>Miner Intel</option>
-                    <option>GDS Net Agent</option>
+                    <option>Lemon Intel — Market intelligence</option>
+                    <option>Miner Intel — Mining reporting</option>
+                    <option>GDS Net Agent — Commercial execution</option>
                   </select>
                 </div>
+                <p class="chat-helper">Each agent is scoped to a specific project and domain.</p>
               </div>
 
               <div>
@@ -172,6 +173,7 @@
                   <input id="chat-prompt" type="text" value="What are the latest pricing signals?" />
                   <button type="button" class="send-button">SEND</button>
                 </div>
+                <p class="chat-helper">Questions only. No live actions, file changes, or external execution.</p>
               </div>
             </div>
           </div>
@@ -186,7 +188,7 @@
 
             <div class="conversation-meta">
               <div><span>Agent</span><strong>Lemon Intel</strong></div>
-              <div><span>Status</span><strong>READY</strong></div>
+              <div><span>Status</span><strong>PREVIEW</strong></div>
             </div>
 
             <div class="bubble bubble-dark">

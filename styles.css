@@ -416,6 +416,13 @@ a {
   min-width: 0;
 }
 
+.chat-helper {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+
 .send-button {
   border: 0;
   background: var(--acid);
