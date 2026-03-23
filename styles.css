@@ -454,6 +454,11 @@ a {
   background: #161616;
 }
 
+.starter-prompt:disabled {
+  background: #111;
+  color: #5f5f5f;
+}
+
 .send-button {
   border: 0;
   background: var(--acid);
@@ -574,6 +579,11 @@ a {
 
 .subtle-response {
   border-left: 2px solid rgba(199, 255, 65, 0.35);
+}
+
+.limit-note {
+  border-left: 2px solid rgba(255,255,255,0.14);
+  color: #b3b3b3;
 }
 
 @keyframes subtlePulse {

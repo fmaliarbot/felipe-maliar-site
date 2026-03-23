@@ -118,9 +118,28 @@ const sendButton = document.getElementById('chat-send');
 let currentAgent = 'lemon';
 let selectedPrompt = '';
 let conversationTurn = 0;
+const agentUsage = {
+  lemon: 0,
+  miner: 0,
+  gds: 0,
+};
+const MAX_AGENT_TURNS = 3;
+
+function isAgentLimited(agentKey) {
+  return agentUsage[agentKey] >= MAX_AGENT_TURNS;
+}
 
 function setSelectedPrompt(promptText = '') {
   selectedPrompt = promptText;
+
+  if (isAgentLimited(currentAgent)) {
+    chatPrompt.textContent = 'Preview limit reached for this agent. Select another agent to continue.';
+    chatPrompt.classList.add('is-empty');
+    metaStatus.textContent = 'LIMIT REACHED';
+    sendButton.disabled = true;
+    return;
+  }
+
   if (!promptText) {
     chatPrompt.textContent = 'Select a starter prompt to preview the interaction.';
     chatPrompt.classList.add('is-empty');
@@ -148,9 +167,10 @@ function resetConversation(agentKey) {
 function appendTurn(agentKey, promptText) {
   const agent = agentData[agentKey];
   const responseData = agent.responses[promptText];
-  if (!responseData) return;
+  if (!responseData || isAgentLimited(agentKey)) return;
 
   conversationTurn += 1;
+  agentUsage[agentKey] += 1;
   const thinkingId = `thinking-${conversationTurn}`;
 
   conversation.insertAdjacentHTML(
@@ -164,6 +184,8 @@ function appendTurn(agentKey, promptText) {
   );
 
   metaStatus.textContent = 'THINKING';
+  renderStarterPrompts(agentKey);
+  setSelectedPrompt('');
   conversation.scrollTop = conversation.scrollHeight;
 
   setTimeout(() => {
@@ -181,20 +203,38 @@ function appendTurn(agentKey, promptText) {
       `
     );
 
-    metaStatus.textContent = 'PREVIEW';
+    if (isAgentLimited(agentKey)) {
+      metaStatus.textContent = 'LIMIT REACHED';
+      conversation.insertAdjacentHTML(
+        'beforeend',
+        `
+          <div class="bubble bubble-dark limit-note">
+            Preview limit reached for ${agent.name}. Select another agent to continue.
+          </div>
+        `
+      );
+      renderStarterPrompts(agentKey);
+      setSelectedPrompt('');
+    } else {
+      metaStatus.textContent = 'PREVIEW';
+    }
+
     conversation.scrollTop = conversation.scrollHeight;
-  }, 900);
+  }, 2200);
 }
 
 function renderStarterPrompts(agentKey) {
   const agent = agentData[agentKey];
+  const limited = isAgentLimited(agentKey);
   starterPrompts.innerHTML = '';
   agent.prompts.forEach((prompt) => {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'starter-prompt';
     button.textContent = prompt;
+    button.disabled = limited;
     button.addEventListener('click', () => {
+      if (isAgentLimited(agentKey)) return;
       setSelectedPrompt(prompt);
       appendTurn(agentKey, prompt);
     });
@@ -210,8 +250,21 @@ function renderAgent(agentKey) {
   agentDescription.textContent = agent.description;
   metaAgent.textContent = agent.name;
   renderStarterPrompts(agentKey);
-  setSelectedPrompt('');
   resetConversation(agentKey);
+
+  if (isAgentLimited(agentKey)) {
+    setSelectedPrompt('');
+    conversation.insertAdjacentHTML(
+      'beforeend',
+      `
+        <div class="bubble bubble-dark limit-note">
+          Preview limit reached for ${agent.name}. Select another agent to continue.
+        </div>
+      `
+    );
+  } else {
+    setSelectedPrompt('');
+  }
 }
 
 Object.entries(agentData).forEach(([key, agent]) => {
