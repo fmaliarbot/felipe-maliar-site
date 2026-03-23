@@ -124,6 +124,7 @@ const agentUsage = {
   gds: 0,
 };
 const MAX_AGENT_TURNS = 3;
+let requestInFlight = false;
 
 function isAgentLimited(agentKey) {
   return agentUsage[agentKey] >= MAX_AGENT_TURNS;
@@ -164,41 +165,71 @@ function resetConversation(agentKey) {
   `;
 }
 
-function appendTurn(agentKey, promptText) {
+async function appendTurn(agentKey, promptText) {
   const agent = agentData[agentKey];
-  const responseData = agent.responses[promptText];
-  if (!responseData || isAgentLimited(agentKey)) return;
+  if (isAgentLimited(agentKey) || requestInFlight) return;
 
   conversationTurn += 1;
-  agentUsage[agentKey] += 1;
   const thinkingId = `thinking-${conversationTurn}`;
+  requestInFlight = true;
 
   conversation.insertAdjacentHTML(
     'beforeend',
     `
       <div class="bubble bubble-accent">${promptText}</div>
       <div class="bubble bubble-dark dimmed" id="${thinkingId}">
-        ${responseData.thinking}
+        Preparing preview request...
       </div>
     `
   );
 
   metaStatus.textContent = 'THINKING';
+  sendButton.disabled = true;
   renderStarterPrompts(agentKey);
   setSelectedPrompt('');
   conversation.scrollTop = conversation.scrollHeight;
 
-  setTimeout(() => {
+  try {
+    const response = await fetch('/api/chat-preview', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ agent: agentKey, prompt: promptText }),
+      credentials: 'same-origin'
+    });
+
+    const data = await response.json();
     const thinkingBubble = document.getElementById(thinkingId);
-    if (thinkingBubble) {
-      thinkingBubble.remove();
+
+    if (thinkingBubble && data.thinking) {
+      thinkingBubble.textContent = data.thinking;
     }
 
+    await new Promise((resolve) => setTimeout(resolve, 2200));
+
+    if (thinkingBubble) thinkingBubble.remove();
+
+    if (!data.ok && data.blocked) {
+      agentUsage[agentKey] = MAX_AGENT_TURNS;
+      metaStatus.textContent = 'LIMIT REACHED';
+      conversation.insertAdjacentHTML(
+        'beforeend',
+        `
+          <div class="bubble bubble-dark limit-note">
+            Preview limit reached for ${agent.name}. Select another agent to continue.
+          </div>
+        `
+      );
+      renderStarterPrompts(agentKey);
+      setSelectedPrompt('');
+      return;
+    }
+
+    agentUsage[agentKey] = data.usage?.count || agentUsage[agentKey];
     conversation.insertAdjacentHTML(
       'beforeend',
       `
         <div class="bubble bubble-dark subtle-response">
-          ${responseData.answer}
+          ${data.answer}
         </div>
       `
     );
@@ -217,10 +248,25 @@ function appendTurn(agentKey, promptText) {
       setSelectedPrompt('');
     } else {
       metaStatus.textContent = 'PREVIEW';
+      sendButton.disabled = false;
     }
-
+  } catch (error) {
+    const thinkingBubble = document.getElementById(thinkingId);
+    if (thinkingBubble) thinkingBubble.remove();
+    metaStatus.textContent = 'ERROR';
+    conversation.insertAdjacentHTML(
+      'beforeend',
+      `
+        <div class="bubble bubble-dark limit-note">
+          Preview backend unavailable. Please try again.
+        </div>
+      `
+    );
+  } finally {
+    requestInFlight = false;
+    if (!isAgentLimited(agentKey) && selectedPrompt) sendButton.disabled = false;
     conversation.scrollTop = conversation.scrollHeight;
-  }, 2200);
+  }
 }
 
 function renderStarterPrompts(agentKey) {
@@ -283,4 +329,18 @@ sendButton.addEventListener('click', () => {
   appendTurn(currentAgent, selectedPrompt);
 });
 
-renderAgent(currentAgent);
+async function bootstrapUsage() {
+  try {
+    const response = await fetch('/api/chat-preview', { credentials: 'same-origin' });
+    const data = await response.json();
+    if (data.ok && data.usage) {
+      Object.assign(agentUsage, data.usage);
+    }
+  } catch {
+    // Ignore bootstrap errors; preview can still work client-side until first request fails.
+  }
+
+  renderAgent(currentAgent);
+}
+
+bootstrapUsage();
