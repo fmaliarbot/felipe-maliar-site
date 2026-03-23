@@ -80,7 +80,23 @@ const metaStatus = document.getElementById('meta-status');
 const sendButton = document.getElementById('chat-send');
 
 let currentAgent = 'lemon';
-let selectedPrompt = agentData[currentAgent].prompts[0];
+let selectedPrompt = '';
+
+function setSelectedPrompt(promptText = '') {
+  selectedPrompt = promptText;
+  if (!promptText) {
+    chatPrompt.textContent = 'Select a starter prompt to preview the interaction.';
+    chatPrompt.classList.add('is-empty');
+    metaStatus.textContent = 'IDLE';
+    sendButton.disabled = true;
+    return;
+  }
+
+  chatPrompt.textContent = promptText;
+  chatPrompt.classList.remove('is-empty');
+  metaStatus.textContent = 'PREVIEW';
+  sendButton.disabled = false;
+}
 
 function renderConversation(agentKey, promptText) {
   const agent = agentData[agentKey];
@@ -107,10 +123,8 @@ function renderStarterPrompts(agentKey) {
     button.className = 'starter-prompt';
     button.textContent = prompt;
     button.addEventListener('click', () => {
-      selectedPrompt = prompt;
-      chatPrompt.textContent = prompt;
+      setSelectedPrompt(prompt);
       renderConversation(agentKey, prompt);
-      metaStatus.textContent = 'PREVIEW';
     });
     starterPrompts.appendChild(button);
   });
@@ -122,12 +136,14 @@ function renderAgent(agentKey) {
   agentScope.textContent = agent.scope;
   agentUseCase.textContent = agent.useCase;
   agentDescription.textContent = agent.description;
-  selectedPrompt = agent.prompts[0];
-  chatPrompt.textContent = selectedPrompt;
   metaAgent.textContent = agent.name;
-  metaStatus.textContent = 'PREVIEW';
   renderStarterPrompts(agentKey);
-  renderConversation(agentKey, selectedPrompt);
+  setSelectedPrompt('');
+  conversation.innerHTML = `
+    <div class="bubble bubble-dark">
+      Select a starter prompt to preview how this agent would respond within its scope.
+    </div>
+  `;
 }
 
 Object.entries(agentData).forEach(([key, agent]) => {

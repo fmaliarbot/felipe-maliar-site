@@ -418,6 +418,13 @@ a {
   align-items: center;
   color: #d0d0d0;
   line-height: 1.5;
+  user-select: none;
+  cursor: default;
+}
+
+.selected-prompt.is-empty {
+  color: #6f6f6f;
+  font-style: italic;
 }
 
 .chat-helper {
@@ -457,6 +464,11 @@ a {
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
+}
+
+.send-button:disabled {
+  background: #232323;
+  color: #777;
 }
 
 .console-header {
