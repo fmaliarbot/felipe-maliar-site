@@ -423,6 +423,26 @@ a {
   line-height: 1.6;
 }
 
+.starter-prompts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.starter-prompt {
+  border: 0;
+  background: #0e0e0e;
+  color: var(--text);
+  padding: 12px 14px;
+  text-align: left;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.starter-prompt:hover {
+  background: #161616;
+}
+
 .send-button {
   border: 0;
   background: var(--acid);
@@ -506,6 +526,11 @@ a {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text);
+}
+
+.conversation {
+  display: flex;
+  flex-direction: column;
 }
 
 .bubble {

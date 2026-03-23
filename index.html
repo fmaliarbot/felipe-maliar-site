@@ -143,7 +143,7 @@
           <div class="agent-copy">
             <p class="eyebrow">INTERFACE PREVIEW</p>
             <h2>CHAT WITH THE AGENT</h2>
-            <p>
+            <p id="agent-description">
               A lightweight interface to interact with project-specific agents, ask questions, and
               inspect the logic behind the work. This preview is designed for insights, not actions.
             </p>
@@ -151,29 +151,30 @@
             <div class="dossier-list">
               <div><span>MODE</span><strong>PREVIEW / READ-ONLY</strong></div>
               <div><span>TYPE</span><strong>PROJECT-SPECIFIC AGENT</strong></div>
-              <div><span>USE CASE</span><strong>QUESTIONS / SIGNALS / CONTEXT</strong></div>
+              <div><span>USE CASE</span><strong id="agent-use-case">QUESTIONS / SIGNALS / CONTEXT</strong></div>
             </div>
 
             <div class="chat-controls">
               <div>
                 <label class="select-label" for="agent-select">SELECT AGENT</label>
                 <div class="select-wrap">
-                  <select id="agent-select">
-                    <option>Lemon Intel — Market intelligence</option>
-                    <option>Miner Intel — Mining reporting</option>
-                    <option>GDS Net Agent — Commercial execution</option>
-                  </select>
+                  <select id="agent-select"></select>
                 </div>
-                <p class="chat-helper">Each agent is scoped to a specific project and domain.</p>
+                <p class="chat-helper" id="agent-scope">Each agent is scoped to a specific project and domain.</p>
               </div>
 
               <div>
                 <label class="select-label" for="chat-prompt">PROMPT</label>
                 <div class="chat-input-row">
-                  <input id="chat-prompt" type="text" value="What are the latest pricing signals?" />
-                  <button type="button" class="send-button">SEND</button>
+                  <input id="chat-prompt" type="text" />
+                  <button type="button" class="send-button" id="chat-send">SEND</button>
                 </div>
                 <p class="chat-helper">Questions only. No live actions, file changes, or external execution.</p>
+              </div>
+
+              <div>
+                <label class="select-label">STARTER PROMPTS</label>
+                <div class="starter-prompts" id="starter-prompts"></div>
               </div>
             </div>
           </div>
@@ -187,20 +188,11 @@
             </div>
 
             <div class="conversation-meta">
-              <div><span>Agent</span><strong>Lemon Intel</strong></div>
-              <div><span>Status</span><strong>PREVIEW</strong></div>
+              <div><span>Agent</span><strong id="meta-agent">Lemon Intel</strong></div>
+              <div><span>Status</span><strong id="meta-status">PREVIEW</strong></div>
             </div>
 
-            <div class="bubble bubble-dark">
-              How can I help you today? I can answer questions about this project.
-            </div>
-            <div class="bubble bubble-accent">What are the latest pricing signals?</div>
-            <div class="bubble bubble-dark dimmed">
-              Analyzing current data sources and executive reporting signals...
-            </div>
-            <div class="bubble bubble-dark subtle-response">
-              Early signal: pricing remains firm, with tighter availability shaping near-term negotiations.
-            </div>
+            <div class="conversation" id="conversation"></div>
           </div>
         </section>
 
