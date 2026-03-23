@@ -33,8 +33,20 @@ const agentData = {
       'Which competitors are most active right now?',
       'Summarize recent market movements.'
     ],
-    response:
-      'Early signal: pricing remains firm, with tighter availability shaping near-term negotiations and keeping buyers cautious.',
+    responses: {
+      'What are the latest pricing signals?': {
+        thinking: 'Analyzing pricing signals and near-term market positioning...',
+        answer: 'Early signal: pricing remains firm, with tighter availability shaping near-term negotiations and keeping buyers cautious.'
+      },
+      'Which competitors are most active right now?': {
+        thinking: 'Reviewing competitor mentions, activity, and recent market movement...',
+        answer: 'The most active competitors are the ones pushing visibility around supply consistency and pricing discipline, which suggests a more defensive competitive posture than outright expansion.'
+      },
+      'Summarize recent market movements.': {
+        thinking: 'Condensing recent market movement into an executive snapshot...',
+        answer: 'Recent movement suggests a market driven by cautious buyers, tighter supply signals, and selective competitive pressure rather than broad price weakness.'
+      }
+    }
   },
   miner: {
     name: 'Miner Intel',
@@ -48,8 +60,20 @@ const agentData = {
       'Summarize the latest market changes.',
       'Which operational signals deserve attention?'
     ],
-    response:
-      'Current priority: condense operational noise into executive-level reporting, with emphasis on market change, risk, and material movement.',
+    responses: {
+      'What matters most for the executive report this week?': {
+        thinking: 'Prioritizing the highest-signal items for executive reporting...',
+        answer: 'This week the executive report should prioritize risk exposure, relevant market movement, and any operational developments that materially affect planning or profitability.'
+      },
+      'Summarize the latest market changes.': {
+        thinking: 'Reviewing current market changes across mining indicators...',
+        answer: 'The latest changes point to a mix of cautious market sentiment, selective movement in key inputs, and a stronger need for concise reporting rather than raw information overload.'
+      },
+      'Which operational signals deserve attention?': {
+        thinking: 'Filtering operational indicators for executive-level relevance...',
+        answer: 'The most important operational signals are the ones tied to execution risk, cost pressure, and changes that could alter reporting priorities over the next cycle.'
+      }
+    }
   },
   gds: {
     name: 'GDS Net Agent',
@@ -63,8 +87,20 @@ const agentData = {
       'Summarize current workflow bottlenecks.',
       'What should leadership focus on next?'
     ],
-    response:
-      'Main signal: execution quality improves when reporting and field feedback close the loop faster, especially around retail visibility and follow-up actions.',
+    responses: {
+      'What matters most in commercial execution right now?': {
+        thinking: 'Reviewing execution priorities and field-to-management signal gaps...',
+        answer: 'What matters most is tightening the loop between field execution, reporting visibility, and follow-up actions so teams can react faster to what is actually happening in stores.'
+      },
+      'Summarize current workflow bottlenecks.': {
+        thinking: 'Identifying workflow bottlenecks across reporting and execution layers...',
+        answer: 'The main bottlenecks usually appear where reporting is delayed, execution data is fragmented, or accountability between teams is not clearly translated into action.'
+      },
+      'What should leadership focus on next?': {
+        thinking: 'Translating current execution signals into leadership priorities...',
+        answer: 'Leadership should focus next on improving visibility, shortening decision cycles, and making sure execution insights become operational changes instead of static reporting.'
+      }
+    }
   },
 };
 
@@ -81,6 +117,7 @@ const sendButton = document.getElementById('chat-send');
 
 let currentAgent = 'lemon';
 let selectedPrompt = '';
+let conversationTurn = 0;
 
 function setSelectedPrompt(promptText = '') {
   selectedPrompt = promptText;
@@ -98,20 +135,55 @@ function setSelectedPrompt(promptText = '') {
   sendButton.disabled = false;
 }
 
-function renderConversation(agentKey, promptText) {
+function resetConversation(agentKey) {
   const agent = agentData[agentKey];
+  conversationTurn = 0;
   conversation.innerHTML = `
     <div class="bubble bubble-dark">
-      How can I help you today? I can answer questions about this project.
-    </div>
-    <div class="bubble bubble-accent">${promptText}</div>
-    <div class="bubble bubble-dark dimmed">
-      Analyzing scoped context and preview data...
-    </div>
-    <div class="bubble bubble-dark subtle-response">
-      ${agent.response}
+      How can I help you today? I can answer questions within the scope of ${agent.name}.
     </div>
   `;
+}
+
+function appendTurn(agentKey, promptText) {
+  const agent = agentData[agentKey];
+  const responseData = agent.responses[promptText];
+  if (!responseData) return;
+
+  conversationTurn += 1;
+  const thinkingId = `thinking-${conversationTurn}`;
+
+  conversation.insertAdjacentHTML(
+    'beforeend',
+    `
+      <div class="bubble bubble-accent">${promptText}</div>
+      <div class="bubble bubble-dark dimmed" id="${thinkingId}">
+        ${responseData.thinking}
+      </div>
+    `
+  );
+
+  metaStatus.textContent = 'THINKING';
+  conversation.scrollTop = conversation.scrollHeight;
+
+  setTimeout(() => {
+    const thinkingBubble = document.getElementById(thinkingId);
+    if (thinkingBubble) {
+      thinkingBubble.remove();
+    }
+
+    conversation.insertAdjacentHTML(
+      'beforeend',
+      `
+        <div class="bubble bubble-dark subtle-response">
+          ${responseData.answer}
+        </div>
+      `
+    );
+
+    metaStatus.textContent = 'PREVIEW';
+    conversation.scrollTop = conversation.scrollHeight;
+  }, 900);
 }
 
 function renderStarterPrompts(agentKey) {
@@ -124,7 +196,7 @@ function renderStarterPrompts(agentKey) {
     button.textContent = prompt;
     button.addEventListener('click', () => {
       setSelectedPrompt(prompt);
-      renderConversation(agentKey, prompt);
+      appendTurn(agentKey, prompt);
     });
     starterPrompts.appendChild(button);
   });
@@ -139,11 +211,7 @@ function renderAgent(agentKey) {
   metaAgent.textContent = agent.name;
   renderStarterPrompts(agentKey);
   setSelectedPrompt('');
-  conversation.innerHTML = `
-    <div class="bubble bubble-dark">
-      Select a starter prompt to preview how this agent would respond within its scope.
-    </div>
-  `;
+  resetConversation(agentKey);
 }
 
 Object.entries(agentData).forEach(([key, agent]) => {
@@ -159,7 +227,7 @@ agentSelect.addEventListener('change', (event) => {
 
 sendButton.addEventListener('click', () => {
   if (!selectedPrompt) return;
-  renderConversation(currentAgent, selectedPrompt);
+  appendTurn(currentAgent, selectedPrompt);
 });
 
 renderAgent(currentAgent);
