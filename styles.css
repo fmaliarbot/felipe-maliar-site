@@ -1,0 +1,530 @@
+:root {
+  --bg: #0b0b0b;
+  --panel: #131313;
+  --panel-2: #1a1a1a;
+  --text: #f5f5f5;
+  --muted: #9a9a9a;
+  --line: #262626;
+  --acid: #c7ff41;
+  --acid-text: #111111;
+  --ongoing: #f0d36f;
+  --lab: #65a8ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at top left, rgba(199, 255, 65, 0.08), transparent 24%),
+    var(--bg);
+  color: var(--text);
+  font-family: 'Manrope', sans-serif;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+select,
+button,
+a {
+  font: inherit;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html.js .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 480ms ease, transform 480ms ease;
+  }
+
+  html.js .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.site-shell {
+  width: min(1280px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.topbar,
+.hero,
+.status-grid,
+.work,
+.agent-zone,
+.partners,
+.footer {
+  margin-bottom: 20px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28px 0;
+}
+
+.brand,
+.nav a,
+.eyebrow,
+.meta-block span,
+.status-card span,
+.project-index,
+.select-label,
+.partner-card span,
+.footer-role,
+.footer-links a {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.brand,
+.eyebrow {
+  color: var(--acid);
+}
+
+.nav {
+  display: flex;
+  gap: 24px;
+}
+
+.nav a,
+.footer-links a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.nav a:hover,
+.footer-links a:hover,
+.project-link:hover {
+  color: var(--acid);
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1.35fr 0.65fr;
+  gap: 20px;
+  align-items: end;
+  min-height: 72vh;
+}
+
+.hero h1,
+.section-head h2,
+.agent-copy h2,
+.status-card-main h2,
+.project h3,
+.footer-name {
+  margin: 0;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.06em;
+}
+
+.hero h1 {
+  margin-top: 18px;
+  font-size: clamp(4rem, 10vw, 8.5rem);
+  line-height: 0.88;
+}
+
+.hero-text,
+.status-card-main p,
+.project p,
+.agent-copy p,
+.meta-block p {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.hero-text {
+  max-width: 760px;
+  margin-top: 28px;
+  font-size: 1.2rem;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 14px;
+  margin-top: 32px;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 0 22px;
+  text-decoration: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.button-primary {
+  background: var(--acid);
+  color: var(--acid-text);
+  transition: transform 180ms ease, filter 180ms ease;
+}
+
+.button-secondary {
+  background: var(--panel);
+  color: var(--text);
+  transition: transform 180ms ease, background-color 180ms ease;
+}
+
+.button-primary:hover,
+.button-secondary:hover {
+  transform: translateY(-2px);
+}
+
+.button-primary:hover {
+  filter: brightness(1.03);
+}
+
+.button-secondary:hover {
+  background: #1f1f1f;
+}
+
+.hero-meta {
+  display: grid;
+  gap: 12px;
+}
+
+.meta-block,
+.status-card,
+.project,
+.partner-card {
+  background: var(--panel);
+}
+
+.meta-block {
+  padding: 22px;
+}
+
+.meta-block p,
+.status-card p,
+.partner-card p {
+  margin: 10px 0 0;
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr 1fr 1fr;
+  gap: 14px;
+}
+
+.status-card {
+  padding: 28px;
+}
+
+.status-card-main h2 {
+  margin-top: 14px;
+  font-size: 2.4rem;
+  line-height: 1;
+}
+
+.status-card-main p {
+  max-width: 640px;
+  margin-top: 18px;
+}
+
+.work {
+  padding: 8px 0;
+}
+
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: end;
+  margin-bottom: 18px;
+}
+
+.section-head h2 {
+  font-size: clamp(2rem, 5vw, 4rem);
+}
+
+.section-note {
+  max-width: 420px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.7;
+  text-align: right;
+}
+
+.project {
+  padding: 26px;
+}
+
+.project-featured {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 20px;
+  align-items: end;
+  min-height: 280px;
+  margin-bottom: 14px;
+}
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.project h3 {
+  margin-top: 18px;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.project-featured h3 {
+  font-size: clamp(2.8rem, 5vw, 4.6rem);
+}
+
+.project-link {
+  color: var(--text);
+  text-decoration: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition: color 180ms ease, transform 180ms ease;
+}
+
+.project:hover .project-link {
+  transform: translateX(4px);
+}
+
+.chip {
+  display: inline-flex;
+  padding: 6px 9px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.chip-active { background: var(--acid); color: var(--acid-text); }
+.chip-ongoing { background: var(--ongoing); color: #171717; }
+.chip-lab { background: var(--lab); color: #07111f; }
+
+.project-muted {
+  background: var(--panel-2);
+}
+
+.agent-zone {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 14px;
+}
+
+.agent-copy,
+.agent-console {
+  padding: 30px;
+}
+
+.agent-copy {
+  background: var(--panel);
+}
+
+.agent-console {
+  background: #050505;
+}
+
+.agent-copy h2 {
+  margin-top: 14px;
+  font-size: clamp(2.2rem, 4vw, 4rem);
+}
+
+.dossier-list {
+  margin-top: 24px;
+  display: grid;
+  gap: 10px;
+}
+
+.dossier-list div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 0;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.dossier-list span {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.dossier-list strong {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text);
+  text-align: right;
+}
+
+.select-label {
+  display: block;
+  margin-top: 28px;
+  margin-bottom: 10px;
+  color: var(--muted);
+}
+
+.select-wrap select,
+.fake-input {
+  width: 100%;
+  border: 0;
+  background: #0e0e0e;
+  color: var(--text);
+  padding: 16px 18px;
+}
+
+.fake-input {
+  margin-top: 14px;
+  color: #707070;
+  font-style: italic;
+}
+
+.console-dots {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.console-dots span {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: #242424;
+}
+
+.bubble {
+  max-width: 78%;
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  line-height: 1.6;
+}
+
+.bubble-dark {
+  background: #121212;
+}
+
+.bubble-accent {
+  margin-left: auto;
+  background: var(--acid);
+  color: var(--acid-text);
+  text-align: right;
+}
+
+.dimmed {
+  color: #8a8a8a;
+  animation: subtlePulse 1.8s ease-in-out infinite;
+}
+
+@keyframes subtlePulse {
+  0%, 100% { opacity: 0.72; }
+  50% { opacity: 1; }
+}
+
+.partner-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: 28px;
+}
+
+.partner-card img {
+  filter: brightness(0) invert(1);
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 20px;
+  padding: 12px 0 36px;
+}
+
+.footer-name {
+  font-size: 2rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+@media (max-width: 1100px) {
+  .hero,
+  .agent-zone,
+  .status-grid,
+  .project-grid,
+  .project-featured {
+    grid-template-columns: 1fr;
+  }
+
+  .status-grid {
+    gap: 12px;
+  }
+}
+
+@media (max-width: 720px) {
+  .site-shell {
+    width: min(100% - 20px, 1280px);
+  }
+
+  .topbar,
+  .footer,
+  .section-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .section-note {
+    text-align: left;
+  }
+
+  .nav {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .hero {
+    min-height: auto;
+    padding-top: 8px;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .button {
+    width: 100%;
+  }
+}
