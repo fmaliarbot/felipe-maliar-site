@@ -386,6 +386,10 @@ a {
   text-align: right;
 }
 
+.chat-controls {
+  margin-top: 8px;
+}
+
 .select-label {
   display: block;
   margin-top: 28px;
@@ -394,7 +398,7 @@ a {
 }
 
 .select-wrap select,
-.fake-input {
+.chat-input-row input {
   width: 100%;
   border: 0;
   background: #0e0e0e;
@@ -402,23 +406,99 @@ a {
   padding: 16px 18px;
 }
 
-.fake-input {
-  margin-top: 14px;
-  color: #707070;
-  font-style: italic;
+.chat-input-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+}
+
+.chat-input-row input {
+  min-width: 0;
+}
+
+.send-button {
+  border: 0;
+  background: var(--acid);
+  color: var(--acid-text);
+  padding: 0 18px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.console-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.console-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
 .console-dots {
   display: flex;
   gap: 8px;
-  margin-bottom: 24px;
 }
 
 .console-dots span {
   width: 12px;
   height: 12px;
   border-radius: 999px;
-  background: #242424;
+}
+
+.console-dots span:nth-child(1) {
+  background: #ff5f57;
+}
+
+.console-dots span:nth-child(2) {
+  background: #febc2e;
+}
+
+.console-dots span:nth-child(3) {
+  background: #28c840;
+}
+
+.conversation-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.conversation-meta div {
+  background: #101010;
+  padding: 14px 16px;
+}
+
+.conversation-meta span {
+  display: block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.conversation-meta strong {
+  display: block;
+  margin-top: 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text);
 }
 
 .bubble {
@@ -442,6 +522,10 @@ a {
 .dimmed {
   color: #8a8a8a;
   animation: subtlePulse 1.8s ease-in-out infinite;
+}
+
+.subtle-response {
+  border-left: 2px solid rgba(199, 255, 65, 0.35);
 }
 
 @keyframes subtlePulse {

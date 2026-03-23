@@ -149,33 +149,55 @@
             </p>
 
             <div class="dossier-list">
-              <div><span>MODE</span><strong>AVAILABLE SOON</strong></div>
+              <div><span>MODE</span><strong>PREVIEW UI</strong></div>
               <div><span>TYPE</span><strong>PROJECT-SPECIFIC AGENT</strong></div>
               <div><span>USE CASE</span><strong>QUESTIONS / SIGNALS / CONTEXT</strong></div>
             </div>
 
-            <label class="select-label" for="agent-select">SELECT AGENT</label>
-            <div class="select-wrap">
-              <select id="agent-select" disabled>
-                <option>Lemon Intel</option>
-                <option>Miner Intel</option>
-                <option>GDS Net Agent</option>
-              </select>
-            </div>
+            <div class="chat-controls">
+              <div>
+                <label class="select-label" for="agent-select">SELECT AGENT</label>
+                <div class="select-wrap">
+                  <select id="agent-select">
+                    <option>Lemon Intel</option>
+                    <option>Miner Intel</option>
+                    <option>GDS Net Agent</option>
+                  </select>
+                </div>
+              </div>
 
-            <div class="fake-input">Type your message... available soon.</div>
+              <div>
+                <label class="select-label" for="chat-prompt">PROMPT</label>
+                <div class="chat-input-row">
+                  <input id="chat-prompt" type="text" value="What are the latest pricing signals?" />
+                  <button type="button" class="send-button">SEND</button>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="agent-console">
-            <div class="console-dots">
-              <span></span><span></span><span></span>
+            <div class="console-header">
+              <div class="console-dots">
+                <span></span><span></span><span></span>
+              </div>
+              <div class="console-label">LIVE UI PREVIEW</div>
             </div>
+
+            <div class="conversation-meta">
+              <div><span>Agent</span><strong>Lemon Intel</strong></div>
+              <div><span>Status</span><strong>READY</strong></div>
+            </div>
+
             <div class="bubble bubble-dark">
               How can I help you today? I can answer questions about this project.
             </div>
             <div class="bubble bubble-accent">What are the latest pricing signals?</div>
             <div class="bubble bubble-dark dimmed">
               Analyzing current data sources and executive reporting signals...
+            </div>
+            <div class="bubble bubble-dark subtle-response">
+              Early signal: pricing remains firm, with tighter availability shaping near-term negotiations.
             </div>
           </div>
         </section>
